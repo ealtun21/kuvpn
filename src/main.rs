@@ -11,15 +11,11 @@ use tokio::time::Duration;
 
 #[tokio::main]
 async fn main() -> Result<(), DriverError> {
-    let oc = format!("chromium",);
-    println!("Executing: {}", oc);
-
     // Use std::process::Command to execute openconnect
     use std::process::Command as StdCommand;
     // Spawn the openconnect process in the background
-    StdCommand::new("sh")
-        .arg("-c")
-        .arg(&oc)
+    
+    StdCommand::new("chromium")
         .status()
         .map_err(DriverError::ProcessStartError)?;
 

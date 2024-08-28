@@ -18,7 +18,7 @@
         # Define the default package
         packages.default = rustPlatform.buildRustPackage rec {
           pname = "kuvpn";
-          version = "0.5.1";
+          version = "0.5.0";
 
           src = ./.;
 
@@ -37,6 +37,9 @@
           PKG_CONFIG_PATH = "${pkgs.openssl.dev}/lib/pkgconfig";
 
           postPatch = ''
+            substituteInPlace src/main.rs --replace "chromium" "${pkgs.chromium}/bin/chromium"
+            substituteInPlace src/utils.rs --replace "openconnect" "${pkgs.openconnect}/bin/openconnect"
+            substituteInPlace src/utils.rs --replace "sudo" "${pkgs.sudo}/bin/sudo"
             substituteInPlace src/driver.rs --replace "chromedriver" "${pkgs.chromedriver}/bin/chromedriver"
           '';
 

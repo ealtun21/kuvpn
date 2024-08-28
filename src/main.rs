@@ -12,6 +12,7 @@ use utils::check_dependencies;
 
 #[tokio::main]
 async fn main() -> Result<(), DriverError> {
+    // Include chromium
     check_dependencies()?;
 
     let mut args = Args::parse();

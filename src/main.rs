@@ -16,7 +16,7 @@ async fn main() -> Result<(), DriverError> {
     // Spawn the openconnect process in the background
 
     StdCommand::new("chromium")
-        .args("--no-sandbox")
+        .arg("--no-sandbox")
         .status()
         .map_err(DriverError::ProcessStartError)?;
 

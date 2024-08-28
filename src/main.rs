@@ -8,7 +8,6 @@ use clap::Parser;
 use client::run_client_with_retries;
 use driver::{Driver, DriverError};
 use tokio::time::Duration;
-use utils::check_dependencies;
 
 #[tokio::main]
 async fn main() -> Result<(), DriverError> {

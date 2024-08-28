@@ -26,7 +26,7 @@ pub fn check_dependencies() -> Result<(), DriverError> {
         .map(|output| output.status.success())
         .unwrap_or(false);
 
-    let openconnect_installed = std::process::Command::new("which")
+    let connecter = std::process::Command::new("which")
         .arg("openconnect")
         .output()
         .map(|output| output.status.success())
@@ -68,12 +68,12 @@ pub fn check_dependencies() -> Result<(), DriverError> {
         || google_chrome_beta_installed
         || google_chrome_unstable_installed;
 
-    if !chromedriver_installed || !openconnect_installed || !browser_installed {
+    if !chromedriver_installed || !connecter || !browser_installed {
         eprintln!("Error: Required dependencies are not installed.");
         if !chromedriver_installed {
             eprintln!("Please install chromedriver.");
         }
-        if !openconnect_installed {
+        if !connecter {
             eprintln!("Please install openconnect.");
         }
         if !browser_installed {
@@ -86,18 +86,17 @@ pub fn check_dependencies() -> Result<(), DriverError> {
 }
 
 pub fn execute_openconnect(cookie_value: String) -> Result<(), DriverError> {
-    let openconnect_command = format!(
-        "sudo openconnect --protocol nc -C 'DSID={}' vpn.ku.edu.tr",
+    let command = format!(
+        "openconnect --protocol nc -C 'DSID={}' vpn.ku.edu.tr",
         cookie_value
     );
-    println!("Executing: {}", openconnect_command);
+    println!("Executing: {}", command);
 
     // Use std::process::Command to execute openconnect
     use std::process::Command as StdCommand;
     // Spawn the openconnect process in the background
-    StdCommand::new("sh")
-        .arg("-c")
-        .arg(&openconnect_command)
+    StdCommand::new("sudo")
+        .arg(&command)
         .status()
         .map_err(DriverError::ProcessStartError)?;
 

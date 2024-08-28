@@ -18,7 +18,7 @@
         # Define the default package
         packages.default = rustPlatform.buildRustPackage rec {
           pname = "kuvpn";
-          version = "0.5.1";
+          version = "0.5.0";
 
           src = ./.;
 
@@ -30,13 +30,9 @@
 
           cargoHash = "sha256-yejviZYX11G/KtfJFFQv6bGq0jD+04Rz3/6Wf2lL8zs=";
 
-          # No need for buildInputs for runtime dependencies
-          buildInputs = [ ];
-
-          # Explicitly set environment variables for pkg-config
-          PKG_CONFIG_PATH = "${pkgs.openssl.dev}/lib/pkgconfig";
-
           postPatch = ''
+            substituteInPlace src/utils.rs --replace "openconnect" "${pkgs.openconnect}/bin/openconnect"
+            substituteInPlace src/utils.rs --replace "sudo" "${pkgs.sudo}/bin/sudo"
             substituteInPlace src/driver.rs --replace "chromedriver" "${pkgs.chromedriver}/bin/chromedriver"
           '';
 
@@ -56,7 +52,6 @@
             pkgs.cargo
             pkgs.chromedriver
             pkgs.openconnect
-            pkgs.chromium 
           ];
 
           nativeBuildInputs = [
@@ -69,16 +64,6 @@
         apps.default = {
           type = "app";
           program = "${self.packages.${system}.default}/bin/kuvpn";
-        };
-
-        apps.chromium = {
-          type = "app";
-          program = "${pkgs.chromium}/bin/chromium";
-        };
-
-        apps.chromedriver = {
-          type = "app";
-          program = "${pkgs.chromedriver}/bin/chromedriver";
         };
       }
     );

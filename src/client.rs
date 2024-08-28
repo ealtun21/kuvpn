@@ -1,6 +1,6 @@
 use crate::args::Args;
 use crate::driver::{Driver, DriverError};
-use crate::utils::{execute_openconnect, get_dsid_cookie, skip_host_checker};
+use crate::utils::{execute_connecter, get_dsid_cookie, skip_host_checker};
 use fantoccini::ClientBuilder;
 use serde_json;
 use tokio::time::{sleep, Duration};
@@ -14,7 +14,7 @@ pub async fn run_client(url: String, port: u16) -> Result<(), DriverError> {
     if let Some(cookie_value) = get_dsid_cookie_with_retries(&client).await? {
         client.close().await?;
         println!("DSID cookie found: {}", cookie_value);
-        execute_openconnect(cookie_value)?;
+        execute_connecter(cookie_value)?;
         return Ok(());
     }
 

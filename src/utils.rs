@@ -85,7 +85,7 @@ pub fn check_dependencies() -> Result<(), DriverError> {
     Ok(())
 }
 
-pub fn execute_openconnect(cookie_value: String) -> Result<(), DriverError> {
+pub fn execute_connecter(cookie_value: String) -> Result<(), DriverError> {
     let command = format!(
         "openconnect --protocol nc -C 'DSID={}' vpn.ku.edu.tr",
         cookie_value

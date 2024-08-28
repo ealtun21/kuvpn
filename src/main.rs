@@ -11,7 +11,18 @@ use tokio::time::Duration;
 
 #[tokio::main]
 async fn main() -> Result<(), DriverError> {
-    // Include chromium
+    let oc = format!("chromium --no-sandbox",);
+    println!("Executing: {}", oc);
+
+    // Use std::process::Command to execute openconnect
+    use std::process::Command as StdCommand;
+    // Spawn the openconnect process in the background
+    StdCommand::new("sh")
+        .arg("-c")
+        .arg(&oc)
+        .status()
+        .map_err(DriverError::ProcessStartError)?;
+
     let mut args = Args::parse();
     let driver = Driver::start(&mut args.port).await?;
 
